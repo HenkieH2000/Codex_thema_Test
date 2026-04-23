@@ -1,0 +1,130 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+<section class="vct-conversion-cards section-width-{{ section.settings.width }}">
+  <div class="vct-shell">
+    <div class="vct-conversion-cards__grid vct-stagger">
+      {%- for block in section.blocks -%}
+        <article class="vct-conversion-card vct-conversion-card--{{ block.settings.tone }}" {{ block.shopify_attributes }}>
+          <div class="vct-conversion-card__copy">
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="vct-kicker">{{ block.settings.eyebrow }}</p>
+            {%- endif -%}
+            <h3>{{ block.settings.title }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p>{{ block.settings.text }}</p>
+            {%- endif -%}
+            {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+              <p class="link-btn">
+                <a href="{{ block.settings.link_url }}" class="overlay-{{ block.settings.button_palette }}{% if block.settings.button_style == 'inv' %} inv{% endif %}">
+                  {{ block.settings.link_text }}
+                </a>
+              </p>
+            {%- endif -%}
+          </div>
+          <div class="vct-conversion-card__media">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 700 }}"
+                srcset="{% render 'image-srcset', image: block.settings.image %}"
+                sizes="(min-width: 1000px) 25vw, 100vw"
+                alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    margin-bottom: {{ section.settings.spacing_mobile }}px;
+  }
+
+  @media (min-width: 760px) {
+    #shopify-section-{{ section.id }} {
+      margin-bottom: {{ section.settings.spacing_desktop }}px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "VCT Conversion Cards",
+  "tag": "section",
+  "class": "section section-vct-conversion-cards",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Breedte",
+      "options": [
+        { "value": "boxed", "label": "Boxed" },
+        { "value": "wide", "label": "Wide" }
+      ],
+      "default": "boxed"
+    },
+    {
+      "type": "range",
+      "id": "spacing_desktop",
+      "label": "Onderafstand desktop",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "spacing_mobile",
+      "label": "Onderafstand mobiel",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Conversion card",
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Label", "default": "Meer zekerheid" },
+        { "type": "text", "id": "title", "label": "Titel", "default": "Maak je homepage rijker met service- en promotiekaarten." },
+        { "type": "textarea", "id": "text", "label": "Tekst", "default": "Perfect voor verzending, installatieservice, returns, dealblokken of merkverhalen." },
+        { "type": "text", "id": "link_text", "label": "Knoptekst", "default": "Lees meer" },
+        { "type": "url", "id": "link_url", "label": "Link" },
+        { "type": "select", "id": "button_palette", "label": "Knopkleur", "options": [
+          { "value": "primary", "label": "Primary" },
+          { "value": "secondary", "label": "Secondary" },
+          { "value": "buy_button", "label": "Buy button" }
+        ], "default": "primary" },
+        { "type": "select", "id": "button_style", "label": "Knopstijl", "options": [
+          { "value": "plain", "label": "Plain" },
+          { "value": "inv", "label": "Inverse" }
+        ], "default": "plain" },
+        { "type": "select", "id": "tone", "label": "Kaartstijl", "options": [
+          { "value": "white", "label": "White" },
+          { "value": "navy", "label": "Navy" },
+          { "value": "gradient", "label": "Gradient" }
+        ], "default": "white" },
+        { "type": "image_picker", "id": "image", "label": "Afbeelding" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VCT Conversion Cards",
+      "blocks": [
+        { "type": "card", "settings": { "eyebrow": "Gratis verzending", "title": "Vanaf een slim ingestelde drempel stijgt je AOV merkbaar.", "text": "Gebruik deze kaart voor bezorging, returns of een trust-argument.", "tone": "white" } },
+        { "type": "card", "settings": { "eyebrow": "Installatieservice", "title": "Laat meteen zien dat klanten bij jullie ook terecht kunnen voor hulp en montage.", "text": "Dit verlaagt twijfel en verhoogt de kans op aankoop bij complexere producten.", "tone": "gradient" } },
+        { "type": "card", "settings": { "eyebrow": "Snelle support", "title": "Zichtbare service maakt het thema menselijker en converterender.", "text": "Gebruik dit blok voor telefoon, WhatsApp of persoonlijke hulp.", "tone": "navy" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

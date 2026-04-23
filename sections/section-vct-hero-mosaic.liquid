@@ -1,0 +1,201 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+{%- liquid
+  assign show_header = false
+  if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.text != blank
+    assign show_header = true
+  endif
+-%}
+
+<section class="vct-hero-mosaic section-width-{{ section.settings.width }}{% if section.settings.enable_overlap %} vct-hero-mosaic--overlap{% endif %}">
+  <div class="vct-shell">
+    {%- if show_header -%}
+      <div class="vct-hero-mosaic__intro{% if section.settings.text_alignment == 'center' %} text-center align-center{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="vct-kicker">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <div class="title-styling title-underline-accent">{{ section.settings.title }}</div>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="vct-hero-mosaic__grid vct-stagger">
+      {%- for block in section.blocks limit: 3 -%}
+        {%- assign has_media = false -%}
+        {%- if block.settings.image != blank or block.settings.video != blank -%}
+          {%- assign has_media = true -%}
+        {%- endif -%}
+        <article class="vct-mosaic-card vct-mosaic-card--{{ block.settings.card_tone }} vct-mosaic-card--{{ block.settings.card_size }}" {{ block.shopify_attributes }}>
+          <div class="vct-mosaic-card__content">
+            {%- if block.settings.label != blank -%}
+              <p class="vct-mosaic-card__label">{{ block.settings.label }}</p>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2>{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p>{{ block.settings.text }}</p>
+            {%- endif -%}
+            {%- if block.settings.link_url != blank and block.settings.link_text != blank -%}
+              <p class="link-btn">
+                <a href="{{ block.settings.link_url }}" class="overlay-{{ block.settings.button_palette }}{% if block.settings.button_style == 'inv' %} inv{% endif %}">
+                  {{ block.settings.link_text }}
+                </a>
+              </p>
+            {%- endif -%}
+          </div>
+
+          <div class="vct-mosaic-card__media{% unless has_media %} vct-mosaic-card__media--empty{% endunless %}">
+            {%- if block.settings.video != blank -%}
+              {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, image_size: '900x' }}
+            {%- elsif block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 900 }}"
+                srcset="{% render 'image-srcset', image: block.settings.image %}"
+                sizes="(min-width: 1000px) 50vw, 100vw"
+                alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
+                loading="{% if section.index > 1 or forloop.first == false %}lazy{% else %}eager{% endif %}"
+              >
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    margin-bottom: {{ section.settings.spacing_mobile }}px;
+  }
+
+  @media (min-width: 760px) {
+    #shopify-section-{{ section.id }} {
+      margin-bottom: {{ section.settings.spacing_desktop }}px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "VCT Hero Mosaic",
+  "tag": "section",
+  "class": "section section-vct-hero-mosaic",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Breedte",
+      "options": [
+        { "value": "boxed", "label": "Boxed" },
+        { "value": "wide", "label": "Wide" }
+      ],
+      "default": "boxed"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Nieuw design"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Titel",
+      "default": "<h1>Een moderne homepage die rust, premium gevoel en koopdrang combineert.</h1>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Gebruik deze sectie voor grote campagnes, seizoensacties of hero-content die direct richting geeft aan de klant.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Tekstuitlijning intro",
+      "options": [
+        { "value": "start", "label": "Links" },
+        { "value": "center", "label": "Midden" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlap",
+      "label": "Subtiele overlap boven de volgende sectie",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "spacing_desktop",
+      "label": "Onderafstand desktop",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "spacing_mobile",
+      "label": "Onderafstand mobiel",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Mosaic card",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Hoofdcollectie" },
+        { "type": "text", "id": "heading", "label": "Titel", "default": "Nieuwe campagne of hoofdcollectie" },
+        { "type": "textarea", "id": "text", "label": "Tekst", "default": "Zet hier een duidelijke belofte, USP of campagneboodschap neer." },
+        { "type": "text", "id": "link_text", "label": "Knoptekst", "default": "Shop nu" },
+        { "type": "url", "id": "link_url", "label": "Link" },
+        { "type": "select", "id": "button_palette", "label": "Knopkleur", "options": [
+          { "value": "buy_button", "label": "Buy button" },
+          { "value": "primary", "label": "Primary" },
+          { "value": "secondary", "label": "Secondary" }
+        ], "default": "buy_button" },
+        { "type": "select", "id": "button_style", "label": "Knopstijl", "options": [
+          { "value": "plain", "label": "Plain" },
+          { "value": "inv", "label": "Inverse" }
+        ], "default": "plain" },
+        { "type": "select", "id": "card_tone", "label": "Kaartstijl", "options": [
+          { "value": "soft-orange", "label": "Soft orange" },
+          { "value": "soft-blue", "label": "Soft blue" },
+          { "value": "white", "label": "White" },
+          { "value": "navy", "label": "Navy" }
+        ], "default": "soft-orange" },
+        { "type": "select", "id": "card_size", "label": "Kaartformaat", "options": [
+          { "value": "large", "label": "Groot" },
+          { "value": "small", "label": "Klein" }
+        ], "default": "small" },
+        { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+        { "type": "video", "id": "video", "label": "Video" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VCT Hero Mosaic",
+      "blocks": [
+        { "type": "card", "settings": { "label": "Bestsellers", "heading": "Visuele deals die direct vertrouwen en koopdrang oproepen.", "text": "Gebruik de grootste kaart voor je hoofdactie, seizoenscampagne of premium categorie.", "card_tone": "soft-orange", "card_size": "large" } },
+        { "type": "card", "settings": { "label": "Slim shoppen", "heading": "Bundles, acties en categorieën", "text": "Laat hier een tweede focus zien voor hogere AOV.", "card_tone": "soft-blue", "card_size": "small" } },
+        { "type": "card", "settings": { "label": "Service", "heading": "Vandaag besteld, snel verzonden", "text": "Versterk hier bezorging, retour of installatieservice.", "card_tone": "white", "card_size": "small" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

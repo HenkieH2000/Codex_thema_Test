@@ -2326,6 +2326,117 @@
     ]
   },
   {
+    "name": "VCT Conversion Lab",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social proof"
+      },
+      {
+        "type": "checkbox",
+        "id": "vct_social_proof_enable",
+        "label": "Social proof inschakelen",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "vct_social_proof_show_viewer",
+        "label": "Viewer badge op productpagina tonen",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "vct_social_proof_position",
+        "label": "Positie",
+        "options": [
+          { "value": "bottom-left", "label": "Linksonder" },
+          { "value": "bottom-right", "label": "Rechtsonder" },
+          { "value": "top-left", "label": "Linksboven" },
+          { "value": "top-right", "label": "Rechtsboven" }
+        ],
+        "default": "bottom-left"
+      },
+      {
+        "type": "range",
+        "id": "vct_social_proof_delay",
+        "label": "Eerste toast na",
+        "min": 3,
+        "max": 20,
+        "step": 1,
+        "unit": "s",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "vct_social_proof_interval_min",
+        "label": "Minimale tussenpauze",
+        "min": 10,
+        "max": 60,
+        "step": 1,
+        "unit": "s",
+        "default": 25
+      },
+      {
+        "type": "range",
+        "id": "vct_social_proof_interval_max",
+        "label": "Maximale tussenpauze",
+        "min": 15,
+        "max": 90,
+        "step": 1,
+        "unit": "s",
+        "default": 45
+      },
+      {
+        "type": "range",
+        "id": "vct_social_proof_viewer_min",
+        "label": "Minimum aantal kijkers",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "default": 6
+      },
+      {
+        "type": "range",
+        "id": "vct_social_proof_viewer_max",
+        "label": "Maximum aantal kijkers",
+        "min": 5,
+        "max": 80,
+        "step": 1,
+        "default": 24
+      },
+      {
+        "type": "text",
+        "id": "vct_social_proof_viewer_suffix",
+        "label": "Tekst achter viewer teller",
+        "default": "mensen bekijken dit nu"
+      },
+      {
+        "type": "text",
+        "id": "vct_social_proof_toast_prefix",
+        "label": "Aria label toasts",
+        "default": "Recente aankopen"
+      },
+      {
+        "type": "textarea",
+        "id": "vct_social_proof_products",
+        "label": "Productnamen voor toasts",
+        "default": "Racing remblokken\nLED upgrade set\nDetailing bundel\nCarPlay scherm\nInstallatieservice"
+      },
+      {
+        "type": "textarea",
+        "id": "vct_social_proof_names",
+        "label": "Voornamen voor toasts",
+        "default": "Joris\nSanne\nPieter\nLisa\nMark\nEmma\nTom\nHanna"
+      },
+      {
+        "type": "textarea",
+        "id": "vct_social_proof_places",
+        "label": "Plaatsen voor toasts",
+        "default": "Amsterdam\nRotterdam\nUtrecht\nEindhoven\nHaarlem\nLeiden\nGroningen\nTilburg"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.custom_scripts.name",
     "settings": [
       {

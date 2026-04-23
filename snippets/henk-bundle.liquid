@@ -7,18 +7,20 @@
 
 <div class="hb-wrapper"
      data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=12"
-     data-main-variant="{{ product.selected_or_first_available_variant.id }}"
-     data-main-price="{{ product.selected_or_first_available_variant.price }}">
+     data-form-id="{{ form_id }}"
+     data-main-variant="{{ current_variant.id | default: product.selected_or_first_available_variant.id }}"
+     data-main-price="{{ current_variant.price | default: product.selected_or_first_available_variant.price }}">
 
   <div class="hb-inner">
     <div class="hb-main-product">
       <div class="hb-main-img-wrap">
-        <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}">
+        {%- assign bundle_main_image = current_variant.featured_media.preview_image | default: current_variant.image | default: product.featured_image -%}
+        <img src="{{ bundle_main_image | img_url: '400x' }}" alt="{{ product.title }}">
       </div>
       <div class="hb-main-info">
         <span class="hb-main-vendor">{{ product.vendor }}</span>
         <span class="hb-main-title">{{ product.title }}</span>
-        <span class="hb-main-price">{{ product.price | money | replace: ',00', ',-' | remove: '€' | strip }}</span>
+        <span class="hb-main-price">{{ current_variant.price | default: product.selected_or_first_available_variant.price | money | replace: ',00', ',-' | remove: '€' | strip }}</span>
       </div>
       <div class="hb-plus">+</div>
     </div>
@@ -55,6 +57,18 @@
     </button>
   </div>
 
+</div>
+
+<div class="hb-variant-data" hidden>
+  {%- for variant in product.variants -%}
+    {%- assign variant_image = variant.featured_media.preview_image | default: variant.image | default: product.featured_image -%}
+    <div
+      class="hb-variant-node"
+      data-variant-id="{{ variant.id }}"
+      data-price="{{ variant.price }}"
+      data-image="{{ variant_image | img_url: '400x' }}"
+    ></div>
+  {%- endfor -%}
 </div>
 
 <div style="display:none">
@@ -292,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!wrapper) return;
 
   const grid      = document.getElementById('hb-upsell-grid');
+  const formId    = wrapper.dataset.formId;
   const footer    = document.getElementById('hb-footer');
   const btn       = document.getElementById('hb-btn');
   const totalNew  = document.getElementById('hb-total-new');
@@ -303,18 +318,63 @@ document.addEventListener('DOMContentLoaded', function () {
   const altNext   = document.getElementById('hb-alt-next');
   const baseUrl   = wrapper.dataset.url;
   const compUrl   = baseUrl + '&intent=complementary';
+  const mainImage = wrapper.querySelector('.hb-main-img-wrap img');
+  const mainPriceEl = wrapper.querySelector('.hb-main-price');
 
   function getMainVariantId() {
-    const liquidVariant = parseInt(wrapper.dataset.mainVariant);
+    if (formId) {
+      const checkedInput = document.querySelector(`[form="${formId}"][name="id"]:checked`);
+      if (checkedInput && checkedInput.value) return parseInt(checkedInput.value, 10);
+
+      const formSelect = document.querySelector(`select[form="${formId}"][name="id"]`);
+      if (formSelect && formSelect.value) return parseInt(formSelect.value, 10);
+
+      const hiddenInput = document.querySelector(`input[form="${formId}"][name="id"][type="hidden"]`);
+      if (hiddenInput && hiddenInput.value) return parseInt(hiddenInput.value, 10);
+    }
+
+    const liquidVariant = parseInt(wrapper.dataset.mainVariant, 10);
     if (liquidVariant) return liquidVariant;
 
     const hidden = document.querySelector('input[name="id"][type="hidden"]');
-    if (hidden && hidden.value) return parseInt(hidden.value);
+    if (hidden && hidden.value) return parseInt(hidden.value, 10);
 
     const anyInput = document.querySelector('[name="id"]');
-    if (anyInput && anyInput.value) return parseInt(anyInput.value);
+    if (anyInput && anyInput.value) return parseInt(anyInput.value, 10);
 
     return null;
+  }
+
+  function getVariantMeta(variantId) {
+    if (!variantId) return null;
+    const node = document.querySelector(`.hb-variant-node[data-variant-id="${variantId}"]`);
+    if (!node) return null;
+
+    return {
+      id: parseInt(node.dataset.variantId, 10),
+      price: parseInt(node.dataset.price, 10),
+      image: node.dataset.image
+    };
+  }
+
+  function syncMainVariantState() {
+    const variantId = getMainVariantId();
+    const meta = getVariantMeta(variantId);
+
+    if (!meta) return;
+
+    wrapper.dataset.mainVariant = String(meta.id);
+    wrapper.dataset.mainPrice = String(meta.price);
+
+    if (mainPriceEl) {
+      mainPriceEl.textContent = money(meta.price);
+    }
+
+    if (mainImage && meta.image) {
+      mainImage.src = meta.image;
+    }
+
+    updateTotals();
   }
 
   let allCards = [];
@@ -427,9 +487,9 @@ document.addEventListener('DOMContentLoaded', function () {
   altClose.addEventListener('click', () => altPanel.style.display = 'none');
 
   function updateTotals() {
-    const mainPrice = parseInt(wrapper.dataset.mainPrice) || 0;
-    let newTotal = mainPrice;
-    let oldTotal = mainPrice;
+    const baseMainPrice = parseInt(wrapper.dataset.mainPrice, 10) || 0;
+    let newTotal = baseMainPrice;
+    let oldTotal = baseMainPrice;
     let any = false;
 
     grid.querySelectorAll('.hb-card').forEach(card => {
@@ -445,6 +505,13 @@ document.addEventListener('DOMContentLoaded', function () {
       totalNew.textContent = money(newTotal);
       totalOld.textContent = money(oldTotal);
     }
+  }
+
+  if (formId) {
+    document.querySelectorAll(`[form="${formId}"]`).forEach((input) => {
+      input.addEventListener('change', () => setTimeout(syncMainVariantState, 0));
+      input.addEventListener('input', () => setTimeout(syncMainVariantState, 0));
+    });
   }
 
   function parseSourceCards(html) {
@@ -501,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function () {
       slotData[i] = i;
       grid.appendChild(buildCard(allCards[i], i));
     }
-    updateTotals();
+    syncMainVariantState();
   });
 
   function updateCartCount(cart) {

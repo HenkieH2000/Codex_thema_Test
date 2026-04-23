@@ -1,0 +1,138 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+<section class="vct-category-cards section-width-{{ section.settings.width }}">
+  <div class="vct-shell">
+    <div class="section-header-row">
+      <div class="title-styling title-underline-accent">
+        {{ section.settings.title }}
+      </div>
+      {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+        <a class="see-all" href="{{ section.settings.link_url }}">{{ section.settings.link_text }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="vct-category-cards__grid vct-stagger">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link | default: '#' }}" class="vct-category-card vct-category-card--{{ block.settings.tone }}" {{ block.shopify_attributes }}>
+          <div class="vct-category-card__media">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 500 }}"
+                srcset="{% render 'image-srcset', image: block.settings.image %}"
+                sizes="(min-width: 1000px) 180px, 40vw"
+                alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+          <div class="vct-category-card__copy">
+            <strong>{{ block.settings.title }}</strong>
+            {%- if block.settings.caption != blank -%}
+              <span>{{ block.settings.caption }}</span>
+            {%- endif -%}
+          </div>
+          <span class="vct-category-card__arrow" aria-hidden="true">+</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    margin-bottom: {{ section.settings.spacing_mobile }}px;
+  }
+
+  @media (min-width: 760px) {
+    #shopify-section-{{ section.id }} {
+      margin-bottom: {{ section.settings.spacing_desktop }}px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "VCT Category Cards",
+  "tag": "section",
+  "class": "section section-vct-category-cards",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Breedte",
+      "options": [
+        { "value": "boxed", "label": "Boxed" },
+        { "value": "wide", "label": "Wide" }
+      ],
+      "default": "boxed"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Titel",
+      "default": "<h2>Shop op categorie</h2>"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Linktekst rechts",
+      "default": "Bekijk alles"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link rechts"
+    },
+    {
+      "type": "range",
+      "id": "spacing_desktop",
+      "label": "Onderafstand desktop",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "spacing_mobile",
+      "label": "Onderafstand mobiel",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Categoriekaart",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titel", "default": "Verlichting" },
+        { "type": "text", "id": "caption", "label": "Subtekst", "default": "Shop nu" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+        { "type": "select", "id": "tone", "label": "Kaartstijl", "options": [
+          { "value": "white", "label": "White" },
+          { "value": "soft", "label": "Soft" },
+          { "value": "accent", "label": "Accent" }
+        ], "default": "white" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VCT Category Cards",
+      "blocks": [
+        { "type": "card", "settings": { "title": "Verlichting", "caption": "Populair" } },
+        { "type": "card", "settings": { "title": "Detailing", "caption": "Premium care" } },
+        { "type": "card", "settings": { "title": "Audio", "caption": "Nieuw binnen" } },
+        { "type": "card", "settings": { "title": "Interieur", "caption": "Best verkocht" } },
+        { "type": "card", "settings": { "title": "Exterieur", "caption": "Upgrade je auto" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

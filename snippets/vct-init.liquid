@@ -30,14 +30,18 @@
     initStagger();
   }
 
+  var socialProofRoot = document.getElementById('vct-social-proof-root');
+
   /* ── Live viewer counter ────────────────────────────────────────── */
   var counters = document.querySelectorAll('.vct-viewer-count');
   if(counters.length){
-    var base = Math.floor(Math.random()*8)+6; // 6-13
+    var viewerMin = socialProofRoot ? parseInt(socialProofRoot.dataset.viewerMin, 10) || 6 : 6;
+    var viewerMax = socialProofRoot ? parseInt(socialProofRoot.dataset.viewerMax, 10) || 25 : 25;
+    var base = Math.floor(Math.random() * ((viewerMax - viewerMin) + 1)) + viewerMin;
     counters.forEach(function(el){ el.textContent = base; });
     setInterval(function(){
       var delta = Math.random() < 0.5 ? 1 : -1;
-      base = Math.max(4, Math.min(25, base + delta));
+      base = Math.max(viewerMin, Math.min(viewerMax, base + delta));
       counters.forEach(function(el){ el.textContent = base; });
     }, 4200);
   }
@@ -75,11 +79,19 @@
 
   /* ── Social proof toasts ────────────────────────────────────────── */
   var toastWrap = document.getElementById('vct-sp-toasts');
-  if(!toastWrap) return;
+  if(!toastWrap || !socialProofRoot) return;
 
-  var names = ['Joris','Sanne','Pieter','Lisa','Mark','Emma','Tom','Hanna','Lars','Kim'];
-  var products = toastWrap.dataset.products ? JSON.parse(toastWrap.dataset.products) : ['een product'];
-  var places = ['Amsterdam','Rotterdam','Utrecht','Eindhoven','Haarlem','Leiden','Groningen','Tilburg'];
+  var names = socialProofRoot.dataset.names ? JSON.parse(socialProofRoot.dataset.names) : ['Joris','Sanne','Pieter','Lisa','Mark'];
+  var products = socialProofRoot.dataset.products ? JSON.parse(socialProofRoot.dataset.products) : ['een product'];
+  var places = socialProofRoot.dataset.places ? JSON.parse(socialProofRoot.dataset.places) : ['Amsterdam','Rotterdam','Utrecht','Eindhoven'];
+  var delay = parseInt(socialProofRoot.dataset.delay, 10) || 8000;
+  var minInterval = parseInt(socialProofRoot.dataset.minInterval, 10) || 25000;
+  var maxInterval = parseInt(socialProofRoot.dataset.maxInterval, 10) || 45000;
+  var templateName = socialProofRoot.dataset.template || '';
+
+  if(!products.length || templateName === 'cart' || templateName === 'customers/login'){
+    return;
+  }
 
   function randomFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
@@ -98,11 +110,21 @@
     }, 4500);
   }
 
-  // First toast after 8s, then every 25-45s
+  function scheduleNextToast() {
+    var nextDelay = minInterval;
+    if (maxInterval > minInterval) {
+      nextDelay = Math.floor(Math.random() * (maxInterval - minInterval + 1)) + minInterval;
+    }
+    setTimeout(function(){
+      showToast();
+      scheduleNextToast();
+    }, nextDelay);
+  }
+
   setTimeout(function(){
     showToast();
-    setInterval(showToast, 25000 + Math.random()*20000);
-  }, 8000);
+    scheduleNextToast();
+  }, delay);
 
 })();
 </script>

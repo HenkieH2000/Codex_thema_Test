@@ -1,0 +1,73 @@
+{%- if settings.vct_social_proof_enable -%}
+  {%- liquid
+    assign product_names = settings.vct_social_proof_products | newline_to_br | strip_newlines | replace: '<br />', '|' | split: '|'
+    assign places = settings.vct_social_proof_places | newline_to_br | strip_newlines | replace: '<br />', '|' | split: '|'
+    assign names = settings.vct_social_proof_names | newline_to_br | strip_newlines | replace: '<br />', '|' | split: '|'
+    assign products_json = ''
+    assign names_json = ''
+    assign places_json = ''
+
+    for item in product_names
+      assign clean_item = item | strip
+      if clean_item != blank
+        unless products_json == blank
+          assign products_json = products_json | append: ','
+        endunless
+        assign products_json = products_json | append: '"' | append: clean_item | escape | append: '"'
+      endif
+    endfor
+
+    for item in names
+      assign clean_item = item | strip
+      if clean_item != blank
+        unless names_json == blank
+          assign names_json = names_json | append: ','
+        endunless
+        assign names_json = names_json | append: '"' | append: clean_item | escape | append: '"'
+      endif
+    endfor
+
+    for item in places
+      assign clean_item = item | strip
+      if clean_item != blank
+        unless places_json == blank
+          assign places_json = places_json | append: ','
+        endunless
+        assign places_json = places_json | append: '"' | append: clean_item | escape | append: '"'
+      endif
+    endfor
+  -%}
+
+  <div
+    id="vct-social-proof-root"
+    class="vct-social-proof-root"
+    data-enabled="{{ settings.vct_social_proof_enable }}"
+    data-show-viewer="{{ settings.vct_social_proof_show_viewer }}"
+    data-position="{{ settings.vct_social_proof_position }}"
+    data-delay="{{ settings.vct_social_proof_delay | times: 1000 }}"
+    data-min-interval="{{ settings.vct_social_proof_interval_min | times: 1000 }}"
+    data-max-interval="{{ settings.vct_social_proof_interval_max | times: 1000 }}"
+    data-viewer-min="{{ settings.vct_social_proof_viewer_min }}"
+    data-viewer-max="{{ settings.vct_social_proof_viewer_max }}"
+    data-products="[{{ products_json }}]"
+    data-places="[{{ places_json }}]"
+    data-names="[{{ names_json }}]"
+    data-template="{{ template.name }}"
+    aria-live="polite"
+    aria-atomic="false"
+  >
+    <div
+      id="vct-sp-toasts"
+      class="vct-sp-toasts-wrapper vct-sp-toasts-wrapper--{{ settings.vct_social_proof_position }}"
+      aria-label="{{ settings.vct_social_proof_toast_prefix | escape }}"
+    ></div>
+
+    {%- if settings.vct_social_proof_show_viewer and template.name == 'product' -%}
+      <div class="vct-viewer-badge vct-reveal vct-viewer-badge--{{ settings.vct_social_proof_position }}" id="vct-viewer-badge">
+        <span class="vct-viewer-dot"></span>
+        <span class="vct-viewer-count">{{ settings.vct_social_proof_viewer_min }}</span>
+        <span>{{ settings.vct_social_proof_viewer_suffix }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

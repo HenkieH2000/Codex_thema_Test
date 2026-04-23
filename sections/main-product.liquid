@@ -800,6 +800,18 @@
                                 <input class="hidden" id="{{ input_label | handleize }}" type="text" name="properties[{{ input_label }}]" value="{{ preorder_label | strip_html }}">
                             {%- endif -%}
                         </ul>
+                        {%- if product.gift_card? == false and product.requires_selling_plan == false -%}
+                            <div class="vct-conversion-stack">
+                                {%- render 'vct-stock-urgency', product: product, variant: current_variant -%}
+                                {%- if current_variant.available -%}
+                                    {%- if product.vendor == 'Glossio' -%}
+                                        {%- render 'henk-glossiobundle' -%}
+                                    {%- else -%}
+                                        {%- render 'henk-bundle', current_variant: current_variant, form_id: form_id -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            </div>
+                        {%- endif -%}
                 {%- endform -%}
                 {%- when 'usp' -%}
                     <ul class="l4us" {{ block.shopify_attributes }}>

@@ -189,6 +189,7 @@
 					render 'back-to-top-button'
 				endif
         render 'upsell-popup'
+        render 'vct-social-proof'
 			-%}
 		</div>
 		{% render 'global-variables' %}
@@ -196,6 +197,7 @@
 		{% render 'color-swatches' %}
 		<script defer src="{{ 'scripts.js' | asset_url }}"></script>
 		<script defer src="{{ 'custom.js' | asset_url }}"></script>
+		{% render 'vct-init' %}
 		{%- if request.design_mode -%}<script defer src="{{ 'backend-listeners.js' | asset_url }}"></script>{%- endif -%}
 		{{ settings.custom_script_for_body }}
 	<script src="{{ 'tiny-img-link-preloader.js' | asset_url }}" defer></script>
