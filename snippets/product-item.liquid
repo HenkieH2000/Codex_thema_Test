@@ -108,11 +108,19 @@
     assign rating_value = product.metafields.reviews.rating.value
     assign rating_count = product.metafields.reviews.rating_count
   endif
+
+  assign product_card_cta = '30 dagen bedenktijd'
+  if current_variant.available
+    assign product_card_status = 'Direct leverbaar'
+  else
+    assign product_card_status = 'Bekijk opties'
+  endif
 -%}
 
 {%- if enable_quick_buy_desktop or enable_quick_buy_mobile -%}
   {%- liquid
     assign product_form_class = 'f8pr form-card'
+    assign product_form_class = product_form_class | append: ' vct-product-card__quick-buy'
     unless enable_quick_buy_mobile
       assign product_form_class = product_form_class | append: ' mobile-hide'
     endunless
@@ -191,7 +199,7 @@
   {%- endcapture %}
 {%- endif -%}
 
-<{{ container }} class="{% if extra_class %}{% unless extra_style contains '--vertical' %}{{ extra_class }}{% endunless %}{% endif %} product-card {{ width_class }}{% if settings.enable_quick_buy != 'none' %} has-form{% endif %}
+<{{ container }} class="{% if extra_class %}{% unless extra_style contains '--vertical' %}{{ extra_class }}{% endunless %}{% endif %} product-card vct-product-card{% if layout contains 'list' %} vct-product-card--list{% endif %} {{ width_class }}{% if settings.enable_quick_buy != 'none' %} has-form{% endif %}
   {% unless current_variant.available %}unavailable{% endunless %}
   {% unless layout contains 'list' %}{% if settings.productcards_text_alignment == 'center' %}text-center{% elsif settings.productcards_text_alignment == 'right' %}text-end{% endif %}{% endunless %}
   {% if settings.show_secondary_image %}second-img-hover{% endif %}
@@ -211,7 +219,7 @@
     </span>
   {%- endif -%}
   {%- if show_image -%}
-    <figure class="{% if settings.multiply_product_images == 'multiply' %} img-multiply{% elsif settings.multiply_product_images == 'multiply-bg' %} img-multiply-bg{% endif %}">
+    <figure class="vct-product-card__media{% if settings.multiply_product_images == 'multiply' %} img-multiply{% elsif settings.multiply_product_images == 'multiply-bg' %} img-multiply-bg{% endif %}">
       {% if show_labels %}{%- render 'product-labels', product: product, origin: 'productitem' -%}{% endif %}
       {% unless layout == 'list-compact' %}<a href="{{ product.url }}" aria-label="{{ title | escape }}">{% endunless %}
         {%- liquid
@@ -292,9 +300,9 @@
       {%- endif -%}
     </figure>
   {%- endif -%}
-  {% if layout == 'list-compact' %}<section>{% else %}<div>{% endif %}
+  {% if layout == 'list-compact' %}<section>{% else %}<div class="vct-product-card__body">{% endif %}
     {%- if show_title or show_vendor -%}
-      <h3{% unless show_vendor %} class="p0"{% endunless %}>
+      <h3 class="vct-product-card__title{% unless show_vendor %} p0{% endunless %}">
         {%- if show_vendor -%}
           <span class="small">
               {{ vendor }}
@@ -363,14 +371,16 @@
       </p>
     {%- endif -%}
     {%- if show_stock -%}
-      {%- render 'product-deliverytime',
-              product: product,
-              show_stock: false,
-              current_variant: current_variant,
-              container: "p",
-              extra_class: 'list-hide',
-              origin: 'productitem'
-      -%}
+      <div class="vct-product-card__delivery">
+        {%- render 'product-deliverytime',
+                product: product,
+                show_stock: false,
+                current_variant: current_variant,
+                container: "p",
+                extra_class: 'list-hide',
+                origin: 'productitem'
+        -%}
+      </div>
     {%- endif -%}
     {%- if settings.product_short_description != 'none' and type == 'both' %}
       {%- liquid
@@ -389,19 +399,21 @@
         </div>
       {%- endif -%}
     {%- endif -%}
-    {% if layout == 'list-compact' %}<section>{% elsif bulk == false %}</div><div class="static">{% endif %}
+    {% if layout == 'list-compact' %}</section><section class="vct-product-card__footer">{% elsif bulk == false %}</div><div class="static vct-product-card__footer">{% endif %}
     {%- if type == 'both' and show_stock %}
-      {%- render 'product-deliverytime',
-              product: product,
-              show_stock: false,
-              current_variant: current_variant,
-              container: "p",
-              extra_class: 'list-only',
-              origin: 'productitem'
-      -%}
+      <div class="vct-product-card__delivery vct-product-card__delivery--list">
+        {%- render 'product-deliverytime',
+                product: product,
+                show_stock: false,
+                current_variant: current_variant,
+                container: "p",
+                extra_class: 'list-only',
+                origin: 'productitem'
+        -%}
+      </div>
     {%- endif -%}
     {%- if bulk == false -%}
-      <p class="price s1pr">
+      <p class="price s1pr vct-product-card__price">
         {%- if product.price_varies and settings.show_price_varies and layout != 'list-compact' -%}
           {%- liquid
             assign price_min = product.price_min | money
@@ -426,6 +438,12 @@
           <span class="small">{{ 'product.unit_price_label' | t }}{{ current_variant.unit_price | money }}&nbsp;{{ 'product.unit_price_separator' | t }} {{ unit_price_base_unit }}</span>
         {%- endif -%}
       </p>
+      {%- unless layout == 'list-compact' -%}
+        <div class="vct-product-card__meta" aria-label="Product voordelen">
+          <span>{{ product_card_status }}</span>
+          <span>{{ product_card_cta }}</span>
+        </div>
+      {%- endunless -%}
     {%- endif -%}
     {%- if enable_color_picker -%}
       {%- liquid

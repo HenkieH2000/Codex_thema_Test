@@ -22,7 +22,7 @@
             endcase
             assign current_variant = product.selected_or_first_available_variant
         -%}
-        <form action="./" method="post" id="sticky-add-to-cart" class="palette-{{ section.settings.color_palette }} module-color-palette f8ps{% if section.settings.position == 'top' %} align-top{% endif %}{% unless section.settings.show_mobile %} mobile-hide{% endunless %} base-font" aria-hidden="true">
+        <form action="./" method="post" id="sticky-add-to-cart" class="palette-{{ section.settings.color_palette }} module-color-palette f8ps vct-sticky-atc{% if section.settings.position == 'top' %} align-top{% endif %}{% unless section.settings.show_mobile %} mobile-hide{% endunless %} base-font" aria-hidden="true">
             <fieldset>
                 <figure class="{% if settings.fill_product_images %} cover{% endif %} {% if settings.multiply_product_images == 'multiply' %}img-multiply{% elsif settings.multiply_product_images == 'multiply-bg' %}img-multiply-bg{% endif %}">
                     <picture>
@@ -132,6 +132,7 @@
                         {%- endif -%}
                     </p>
                 </footer>
+                {%- render 'vct-checkout-assurance', context: 'sticky' -%}
             </fieldset>
         </form>
     {%- endunless -%}

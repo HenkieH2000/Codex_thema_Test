@@ -300,9 +300,31 @@
                 {%- when 'spacer' -%}
                     <div class="module-spacer" style="margin-bottom:{{ block.settings.height }}px;" {{ block.shopify_attributes }}></div>
                 {%- when 'custom_liquid' -%}
-                    {{ block.settings.custom_liquid }}
+                    {%- liquid
+                        assign custom_liquid_markup = block.settings.custom_liquid
+                        if custom_liquid_markup contains 'class="vct-price-row"'
+                            render 'vct-pdp-price-row', product: product, variant: current_variant
+                        elsif custom_liquid_markup contains 'class="vct-info-block"'
+                            render 'vct-pdp-delivery-panel', product: product, variant: current_variant
+                        elsif custom_liquid_markup contains 'product-info-blocks-responsive'
+                            render 'vct-pdp-usp-grid'
+                        elsif custom_liquid_markup contains 'contact-block-outer'
+                            render 'vct-pdp-support-card'
+                        else
+                            echo custom_liquid_markup
+                        endif
+                    -%}
                 {%- when 'custom_html' -%}
-                    {{ block.settings.custom_html }}
+                    {%- liquid
+                        assign custom_html_markup = block.settings.custom_html
+                        if custom_html_markup contains 'class="vct-bar"'
+                            render 'vct-pdp-feedback-bar'
+                        elsif custom_html_markup contains 'betaalmethodes.png'
+                            render 'vct-payment-strip'
+                        else
+                            echo custom_html_markup
+                        endif
+                    -%}
                 {%- when 'title' -%}
                     {%- if forloop.first == false -%}
                         {%- if title_block.settings.layout == 'title-right' -%}

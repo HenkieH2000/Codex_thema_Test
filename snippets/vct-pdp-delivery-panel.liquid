@@ -1,0 +1,178 @@
+{%- liquid
+  assign current_variant = variant | default: product.selected_or_first_available_variant
+  assign stock = current_variant.inventory_quantity | default: 0
+  assign variant_price = current_variant.price | default: product.price
+  assign type_lower = product.type | downcase
+  assign free_shipping_threshold = 3900
+-%}
+
+<div
+  class="vct-delivery-panel"
+  data-vct-delivery-panel
+  data-threshold="{{ free_shipping_threshold }}"
+  data-price="{{ variant_price }}"
+>
+  {%- if stock <= 0 -%}
+    <div class="vct-delivery-panel__row vct-delivery-panel__row--warning">
+      <span class="vct-delivery-panel__icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v6"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div class="vct-delivery-panel__content">
+        <strong>Tijdelijk niet op voorraad</strong>
+        <span>Geschatte levertijd: 5-7 werkdagen</span>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="vct-delivery-panel__row vct-delivery-panel__row--success">
+      <span class="vct-delivery-panel__icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+      </span>
+      <div class="vct-delivery-panel__content">
+        <strong>Op voorraad</strong>
+        <span data-vct-shipping-message>We berekenen je verzendbelofte...</span>
+      </div>
+      <span class="vct-delivery-panel__timer" data-vct-countdown hidden></span>
+    </div>
+
+    {%- if stock <= 5 -%}
+      <div class="vct-delivery-panel__divider"></div>
+      <div class="vct-delivery-panel__row{% if type_lower == 'amio' and stock == 1 %} vct-delivery-panel__row--soft-warning{% endif %}">
+        <span class="vct-delivery-panel__icon vct-delivery-panel__icon--accent">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 16H3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+        </span>
+        <div class="vct-delivery-panel__content">
+          {%- if type_lower == 'amio' and stock == 1 -%}
+            <strong>Let op: nog 1 stuk op voorraad</strong>
+            <span>Bij meerdere stuks kan de levertijd oplopen naar 5-7 werkdagen</span>
+          {%- else -%}
+            <strong>Nog maar {{ stock }} {% if stock == 1 %}stuk{% else %}stuks{% endif %} beschikbaar</strong>
+            <span>Populair artikel, op = op</span>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="vct-delivery-panel__divider"></div>
+    <div class="vct-delivery-panel__row">
+      <span class="vct-delivery-panel__icon vct-delivery-panel__icon--accent">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 3h15v13H1z"></path><path d="M16 8h4l3 4v4h-7z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+      </span>
+      <div class="vct-delivery-panel__content">
+        <strong data-vct-threshold-title>Controleer gratis verzending...</strong>
+        <span data-vct-threshold-sub>Gratis verzending vanaf 39,-</span>
+      </div>
+      <div class="vct-delivery-panel__progress" data-vct-progress-wrap hidden>
+        <div class="vct-delivery-panel__progress-bar">
+          <div class="vct-delivery-panel__progress-fill" data-vct-progress-fill></div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+<script>
+  (function () {
+    var panel = document.currentScript.previousElementSibling;
+    if (!panel || panel.dataset.bound === 'true') return;
+    panel.dataset.bound = 'true';
+
+    var threshold = Number(panel.dataset.threshold || 3900);
+    var variantPrice = Number(panel.dataset.price || 0);
+    var shippingMessage = panel.querySelector('[data-vct-shipping-message]');
+    var countdown = panel.querySelector('[data-vct-countdown]');
+    var thresholdTitle = panel.querySelector('[data-vct-threshold-title]');
+    var thresholdSub = panel.querySelector('[data-vct-threshold-sub]');
+    var progressWrap = panel.querySelector('[data-vct-progress-wrap]');
+    var progressFill = panel.querySelector('[data-vct-progress-fill]');
+
+    function nextWeekday(date) {
+      var d = new Date(date);
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+      return d.toLocaleDateString('nl-NL', { weekday: 'long' });
+    }
+
+    function updateShippingMessage() {
+      if (!shippingMessage) return;
+      var now = new Date();
+      var day = now.getDay();
+      var hour = now.getHours();
+      var cutoff = '20:00';
+      var dayText = 'morgen';
+
+      if (day >= 1 && day <= 5 && hour < 20) {
+        dayText = 'vandaag';
+      } else if (day >= 1 && day <= 4 && hour >= 20) {
+        dayText = nextWeekday(now);
+        cutoff = '23:59';
+      } else if ((day === 5 && hour >= 20) || day === 6 || day === 0) {
+        dayText = 'maandag';
+        cutoff = '23:59';
+      } else {
+        cutoff = '23:59';
+      }
+
+      var shippingWord = variantPrice >= threshold ? '<strong>gratis</strong> verzonden' : 'verzonden';
+      shippingMessage.innerHTML = 'Besteld voor <strong>' + cutoff + '</strong> en ' + dayText + ' ' + shippingWord;
+    }
+
+    function updateTimer() {
+      if (!countdown) return;
+      var now = new Date();
+      var day = now.getDay();
+      var hour = now.getHours();
+      if (!(day >= 1 && day <= 5 && hour < 20)) {
+        countdown.hidden = true;
+        return;
+      }
+
+      var cutoff = new Date();
+      cutoff.setHours(20, 0, 0, 0);
+      var diff = cutoff - now;
+      if (diff <= 0) {
+        countdown.hidden = true;
+        return;
+      }
+
+      var hours = Math.floor(diff / 3600000);
+      var minutes = Math.floor((diff % 3600000) / 60000);
+      var seconds = Math.floor((diff % 60000) / 1000);
+      countdown.hidden = false;
+      countdown.textContent =
+        String(hours).padStart(2, '0') + ':' +
+        String(minutes).padStart(2, '0') + ':' +
+        String(seconds).padStart(2, '0');
+    }
+
+    function updateThreshold() {
+      if (!thresholdTitle || !thresholdSub) return;
+      fetch('/cart.js')
+        .then(function (response) { return response.json(); })
+        .then(function (cart) {
+          var total = Number(cart.total_price || 0);
+          var missing = threshold - total;
+          var percentage = Math.min(100, Math.round((total / threshold) * 100));
+
+          if (missing <= 0) {
+            thresholdTitle.innerHTML = 'Gratis verzending van toepassing';
+            thresholdSub.textContent = 'Je bestelling wordt gratis verzonden';
+            if (progressWrap) progressWrap.hidden = true;
+          } else {
+            thresholdTitle.innerHTML = 'Nog <strong>' + (missing / 100).toFixed(2).replace('.', ',') + '</strong> voor gratis verzending';
+            thresholdSub.textContent = 'Gratis verzending vanaf 39,-';
+            if (progressWrap) progressWrap.hidden = false;
+            if (progressFill) progressFill.style.width = percentage + '%';
+          }
+        })
+        .catch(function () {
+          thresholdTitle.textContent = 'Gratis verzending vanaf 39,-';
+          thresholdSub.textContent = 'Voeg nog iets toe voor extra voordeel';
+        });
+    }
+
+    updateShippingMessage();
+    updateThreshold();
+    updateTimer();
+    window.setInterval(updateTimer, 1000);
+    document.addEventListener('cart:updated', updateThreshold);
+  })();
+</script>

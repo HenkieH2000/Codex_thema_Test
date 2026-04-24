@@ -1,0 +1,46 @@
+{%- liquid
+  assign current_variant = variant | default: product.selected_or_first_available_variant
+  assign compare_at_price = current_variant.compare_at_price | default: product.compare_at_price
+  assign current_price = current_variant.price | default: product.price
+  assign on_sale = false
+  if compare_at_price > current_price
+    assign on_sale = true
+    assign savings = compare_at_price | minus: current_price
+    assign savings_pct = savings | times: 100.0 | divided_by: compare_at_price | ceil
+  endif
+-%}
+
+<div class="vct-price-card" data-vct-price-card>
+  <div class="vct-price-card__top">
+    <div class="vct-price-card__prices">
+      {%- if on_sale -%}
+        <span class="vct-price-card__compare">{{ compare_at_price | money | replace: ',00', ',-' }}</span>
+        <strong class="vct-price-card__current vct-price-card__current--sale">{{ current_price | money | replace: ',00', ',-' }}</strong>
+        <span class="vct-price-card__badge">Bespaar {{ savings_pct }}%</span>
+      {%- else -%}
+        <strong class="vct-price-card__current">{{ current_price | money | replace: ',00', ',-' }}</strong>
+      {%- endif -%}
+    </div>
+
+    <a
+      href="https://www.thuiswinkel.org/leden/vctparts/certificaat/"
+      target="_blank"
+      rel="noopener"
+      class="vct-price-card__trust"
+      aria-label="Bekijk het Thuiswinkel Waarborg certificaat"
+    >
+      <img
+        src="https://cdn.shopify.com/s/files/1/0871/5904/6480/files/Thuiswinkel_logo_8abf4ba1-aa46-47cc-8cdd-f6acdbcd26ee.jpg?v=1745779809"
+        alt="Thuiswinkel Waarborg VCTparts"
+        width="72"
+        height="72"
+        loading="lazy"
+      >
+    </a>
+  </div>
+
+  <div class="vct-price-card__meta">
+    <span class="vct-price-card__meta-pill">Direct uit voorraad leverbaar</span>
+    <span class="vct-price-card__meta-pill">Veilig afrekenen</span>
+  </div>
+</div>

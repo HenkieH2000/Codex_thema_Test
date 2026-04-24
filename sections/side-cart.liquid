@@ -409,7 +409,7 @@
       </ul>
     </div>
   {%- endif -%}
-  <form class="sticky-in-panel f8vl" action="{{ routes.cart_url }}" method="post" data-hold="0">
+  <form class="sticky-in-panel f8vl vct-cart-checkout" action="{{ routes.cart_url }}" method="post" data-hold="0">
     <ul class="l4tt m15">
       <li><span>{{ 'cart.total_products' | t }} ({{ cart.item_count }})</span> {{ cart.items_subtotal_price | money }}</li>
       {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -425,6 +425,7 @@
         <textarea name="note" id="note_side" placeholder="{{ 'cart.add_note_placeholder' | t }}"{% if section.settings.order_notes_alignment == 'left' %} data-bind="note_{{ section.id }}_mobile"{% endif %}>{{ cart.note }}</textarea>
       </p>
     {% endif %}
+    {%- render 'vct-checkout-assurance', context: 'cart' -%}
     <p class="link-btn wide m10" style="margin-bottom: 0 !important;">
       <a class="overlay-buy_button{% if settings.button_style == 'inv' %} inv{% endif %}" href="{{ routes.cart_url }}">{{ 'cart.to_cart' | t }}</a>
       {%- if settings.cart_drawer_checkout_button -%}
@@ -440,11 +441,7 @@
         </button>
       {%- endif -%}
     </p>
-
-    <p style="display: inline-block; font-size: 9px; margin-bottom: 5px;">
-      Door te af te rekenen accepteer je de 
-      <a href="/policies/terms-of-service" target="_blank" rel="noopener noreferrer">algemene voorwaarden</a> en bevestig je je bestelling en gegevens te hebben gecontroleerd.
-    </p>
+    {%- render 'vct-checkout-assurance', context: 'cart-note', show_note: true -%}
   </form>
   {%- if settings.show_trustbadge -%}
     {%- render 'trustbadge' -%}

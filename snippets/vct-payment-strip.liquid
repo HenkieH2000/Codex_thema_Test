@@ -1,0 +1,11 @@
+<div class="vct-payment-strip">
+  <div class="vct-payment-strip__copy">
+    <span class="vct-payment-strip__eyebrow">Veilig afrekenen</span>
+    <strong>Betaal zoals jij wilt</strong>
+  </div>
+  <ul class="vct-payment-strip__methods" aria-label="Beschikbare betaalmethodes">
+    {%- for payment_method in shop.enabled_payment_types -%}
+      <li>{{ payment_method | payment_type_svg_tag }}</li>
+    {%- endfor -%}
+  </ul>
+</div>
