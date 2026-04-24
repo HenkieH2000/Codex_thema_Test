@@ -83,7 +83,7 @@
   {%- endif -%}
 {%- endcapture -%}
 
-<div class="collection-wrapper {% if show_filters_and_menu %}m6cl{% if section.settings.filter_sticky %} sticky{% endif %}{% endif %}{% if section.settings.filters_menu_alignment == 'right' %} m6cl-inv{% endif %}">
+<div class="collection-wrapper vct-collection-layout {% if show_filters_and_menu %}m6cl{% if section.settings.filter_sticky %} sticky{% endif %}{% endif %}{% if section.settings.filters_menu_alignment == 'right' %} m6cl-inv{% endif %}">
   {%- if show_filters_and_menu -%}<div>{%- endif -%}
     {%- for block in section.blocks -%}
       {%- case block.type -%}
@@ -92,12 +92,40 @@
         {%- when 'spacer' -%}
           <div class="module-spacer" style="margin-bottom:{{ block.settings.height }}px;" {{ block.shopify_attributes }}></div>
         {%- when 'title'-%}
-          <header {% if block.settings.text_alignment == 'center' %}class="text-center"{% endif %} {{ block.shopify_attributes }}>
-            {% if block.settings.title != blank %}
-              <{{ block.settings.title_size }}>{{ block.settings.title }}</{{ block.settings.title_size }}>
-            {% else %}
-              <{{ block.settings.title_size }}>{{ collection.title }}</{{ block.settings.title_size }}>
-            {% endif %}
+          <header class="vct-collection-hero{% if block.settings.text_alignment == 'center' %} text-center{% endif %}" {{ block.shopify_attributes }}>
+            <div class="vct-collection-hero__surface">
+              <p class="vct-kicker">{{ collection.all_products_count | default: collection.products_count }} producten</p>
+              {% if block.settings.title != blank %}
+                <{{ block.settings.title_size }}>{{ block.settings.title }}</{{ block.settings.title_size }}>
+              {% else %}
+                <{{ block.settings.title_size }}>{{ collection.title }}</{{ block.settings.title_size }}>
+              {% endif %}
+              <div class="vct-collection-hero__meta">
+                <span>Snelle levering</span>
+                <span>30 dagen bedenktijd</span>
+                <span>Achteraf betalen mogelijk</span>
+              </div>
+              {%- if collection.description != blank -%}
+                <p class="vct-collection-hero__text">{{ collection.description | strip_html | truncatewords: 28 }}</p>
+              {%- endif -%}
+              {%- if collections_menu != blank or quick_links != blank -%}
+                <ul class="vct-collection-hero__chips">
+                  {%- if collections_menu != blank -%}
+                    {%- for featured_collection in collections_menu limit: 6 -%}
+                      <li>
+                        <a href="{{ featured_collection.url }}"{% if featured_collection.handle == collection.handle %} class="is-active"{% endif %}>{{ featured_collection.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  {%- else -%}
+                    {%- for link in quick_links.links limit: 6 -%}
+                      <li>
+                        <a href="{{ link.url }}"{% if link.active or link.child_active %} class="is-active"{% endif %}>{{ link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </ul>
+              {%- endif -%}
+            </div>
           </header>
           {%- if sorting_block == nil and show_filters_and_menu -%}
             {%- render 'filters-sorting',
@@ -166,7 +194,7 @@
                   prev_button: true
                 %}
               {%- endif -%}
-              <ul id="collection" class="l4cl mobile-scroll {% if settings.enable_quick_buy %}with-quick-buy{% endif %}{% if collection_view == 'list' %} list{% endif %}{% unless show_filters_and_menu %} mobile-wide{% endunless %}{% if section.settings.products_per_row_mobile == '1' %} w100-mobile{% endif %}" {{ block.shopify_attributes }}>
+              <ul id="collection" class="l4cl vct-collection-grid mobile-scroll {% if settings.enable_quick_buy %}with-quick-buy{% endif %}{% if collection_view == 'list' %} list{% endif %}{% unless show_filters_and_menu %} mobile-wide{% endunless %}{% if section.settings.products_per_row_mobile == '1' %} w100-mobile{% endif %}" {{ block.shopify_attributes }}>
                 {%- liquid
                   if settings.fill_product_images
                     assign largest_product_img = collection.products.first
@@ -247,7 +275,7 @@
   {%- if show_filters_and_menu -%}</div>{%- endif -%}
   {% if show_filters_and_menu %}
     {% for filter in collection.filters limit: 1 %}{% endfor %} {% comment %} This is just to get rid of the "this theme does not support filters" message in the shopify admin {% endcomment %}
-    <aside>
+    <aside class="vct-collection-sidebar">
       {%- render 'filters-sorting',
         display: 'filters',
         show_filters: show_filters,
