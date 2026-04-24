@@ -16,6 +16,7 @@
   assign collection_view = cart.attributes.collection_view | default: section.settings.productview_type
   assign show_filters_and_menu = true
   assign show_filters = section.settings.enable_filters
+  assign search_result_count = search.results_count | default: 0
 
   if show_filters and search.filters == empty
     assign show_filters = false
@@ -84,7 +85,7 @@
   {%- endif -%}
 {%- endcapture -%}
 
-<div class="collection-wrapper {% if show_filters_and_menu %}m6cl{% if section.settings.filter_sticky %} sticky{% endif %}{% endif %}{% if section.settings.filters_menu_alignment == 'right' %} m6cl-inv{% endif %}">
+<div class="collection-wrapper vct-collection-layout {% if show_filters_and_menu %}m6cl{% if section.settings.filter_sticky %} sticky{% endif %}{% endif %}{% if section.settings.filters_menu_alignment == 'right' %} m6cl-inv{% endif %}">
   {%- if show_filters_and_menu -%}<div>{%- endif -%}
     {%- for block in section.blocks -%}
       {%- case block.type -%}
@@ -93,21 +94,50 @@
         {%- when 'spacer' -%}
           <div class="module-spacer" style="margin-bottom:{{ block.settings.height }}px;" {{ block.shopify_attributes }}></div>
         {%- when 'title' -%}
-          <header {% if block.settings.text_alignment == 'center' %}class="text-center"{% endif %} {{ block.shopify_attributes }}>
-            {% if search.performed %}
-              <h1 >{{ 'search.results_plus_term' | t: term: search.terms }}</h1>
-            {% else %}
-              <h1 >{{ 'search.title' | t }}</h1>
-            {% endif %}
+          <header class="vct-collection-hero vct-search-hero{% if block.settings.text_alignment == 'center' %} text-center{% endif %}" {{ block.shopify_attributes }}>
+            <div class="vct-collection-hero__surface vct-search-hero__surface">
+              <p class="vct-kicker">
+                {% if search.performed %}
+                  {{ search_result_count }} resultaten
+                {% else %}
+                  Zoek direct in het assortiment
+                {% endif %}
+              </p>
+              {% if search.performed %}
+                <h1>{{ 'search.results_plus_term' | t: term: search.terms }}</h1>
+              {% else %}
+                <h1>{{ 'search.title' | t }}</h1>
+              {% endif %}
+              <div class="vct-collection-hero__meta">
+                <span>Producten, blogs en pagina's</span>
+                <span>Zoek op merk, EAN of toepassing</span>
+                <span>Sneller naar de juiste upgrade</span>
+              </div>
+              <p class="vct-collection-hero__text">
+                {% if search.performed %}
+                  We tonen de meest relevante resultaten voor <strong>"{{ search.terms | escape }}"</strong>, zodat je sneller door kunt naar de juiste productpagina.
+                {% else %}
+                  Zoek op productnaam, automodel, merk of artikelnummer en ga zonder omwegen naar de juiste match.
+                {% endif %}
+              </p>
+            </div>
           </header>
-          <form action="{{ routes.search_url }}" method="get" class="f8se no-js">
-    				<p class="m10">{{ 'search.amount_of_results' | t: count: search.results_count, amount: search.results_count }}</p>
-    				<p>
-    					<label for="fea" class="hidden">{{ 'search.title' | t }}</label>
-    					<input type="search" id="fea" name="q" placeholder="{{ 'search.search_form.placeholder' | t }}" autocomplete="off" required {% if search.performed %}value="{{ search.terms }}"{% endif %}>
-    					<button type="submit">{{ 'search.search_form.submit' | t }}</button>
-    				</p>
-    			</form>
+          <form action="{{ routes.search_url }}" method="get" class="vct-search-form no-js" role="search">
+            <label for="fea" class="hidden">{{ 'search.title' | t }}</label>
+            <div class="vct-search-form__row">
+              <div class="vct-search-form__field">
+                <input type="search" id="fea" name="q" placeholder="{{ 'search.search_form.placeholder' | t }}" autocomplete="off" required {% if search.performed %}value="{{ search.terms }}"{% endif %}>
+              </div>
+              <button type="submit">{{ 'search.search_form.submit' | t }}</button>
+            </div>
+            <p class="vct-search-form__hint">
+              {% if search.performed %}
+                {{ 'search.amount_of_results' | t: count: search_result_count, amount: search_result_count }}
+              {% else %}
+                Zoek op productnaam, merk, EAN of toepassing voor het snelste resultaat.
+              {% endif %}
+            </p>
+          </form>
           {%- liquid
             if sorting_block == nil and show_filters_and_menu
               render 'filters-sorting', display: 'mobile-filter-button', sticky: section.settings.filter_mobile_sticky, show_filters: show_filters
@@ -137,15 +167,20 @@
                         prev_button: true
                 %}
               {%- endif -%}
-              <div class="results">
+              <div class="results vct-search-results">
                 {%- if products.size > 0 -%}
-                  <ul id="collection" class="l4cl mobile-scroll {% if settings.enable_quick_buy %}with-quick-buy{% endif %}{% if collection_view == 'list' %} list{% endif %}{% unless show_filters_and_menu %} mobile-wide{% endunless %}{% if section.settings.products_per_row_mobile == '1' %} w100-mobile{% endif %}" {{ block.shopify_attributes }}>
+                  <section class="vct-search-results__group">
+                    <div class="vct-search-results__group-head">
+                      <h2>Producten</h2>
+                      <span>{{ products.size }}</span>
+                    </div>
+                    <ul id="collection" class="l4cl vct-collection-grid mobile-scroll {% if settings.enable_quick_buy %}with-quick-buy{% endif %}{% if collection_view == 'list' %} list{% endif %}{% unless show_filters_and_menu %} mobile-wide{% endunless %}{% if section.settings.products_per_row_mobile == '1' %} w100-mobile{% endif %}" {{ block.shopify_attributes }}>
                     {%- liquid
                       if settings.fill_product_images
-                        assign largest_product_img = collection.products.first
+                        assign largest_product_img = products.first
                       else
                         assign products_in_view = section.settings.products_per_row | times: 2
-                        for product in collection.products limit: products_in_view
+                        for product in products limit: products_in_view
                           if product.selected_or_first_available_variant.featured_image
                             assign product_image = product.selected_or_first_available_variant.featured_image
                           else
@@ -186,32 +221,60 @@
                         sizes: image_sizes
                       -%}
                     {%- endfor -%}
-                  </ul>
+                    </ul>
+                  </section>
                 {%- endif -%}
                 {%- if pages.size > 0 -%}
-                  <hr>
-                  {%- for page in pages -%}
-                    <div>
-                      <header>
-                        <h3><a href="{{ page.url }}">{{ page.title }}</a></h3>
-                      </header>
-                      {{ page.content | strip_html | truncatewords: 50 }}
-                      <br><a href="{{ page.url }}" class="strong">{{ 'general.read_more.read_more' | t }} <i aria-hidden="true" class="icon-chevron-right"></i></a>
+                  <section class="vct-search-results__group">
+                    <div class="vct-search-results__group-head">
+                      <h2>Pagina's</h2>
+                      <span>{{ pages.size }}</span>
                     </div>
-                    {% unless forloop.last and articles.size == 0 %}
-                      <hr>
-                    {% endunless %}
-                  {%- endfor -%}
+                    <div class="vct-search-content-grid">
+                      {%- for page in pages -%}
+                        <article class="vct-search-content-card">
+                          <p class="vct-search-content-card__eyebrow">Pagina</p>
+                          <h3><a href="{{ page.url }}">{{ page.title }}</a></h3>
+                          <p>{{ page.content | strip_html | truncatewords: 28 }}</p>
+                          <a href="{{ page.url }}" class="strong">{{ 'general.read_more.read_more' | t }} <i aria-hidden="true" class="icon-chevron-right"></i></a>
+                        </article>
+                      {%- endfor -%}
+                    </div>
+                  </section>
                 {%- endif -%}
                 {%- if articles.size > 0 -%}
-                  {%- if pages.size == 0 -%}<hr>{%- endif -%}
-                  <ul class="l4ne">
+                  <section class="vct-search-results__group">
+                    <div class="vct-search-results__group-head">
+                      <h2>Blogs</h2>
+                      <span>{{ articles.size }}</span>
+                    </div>
+                    <ul class="l4ne vct-search-article-list">
                     {%- for article in articles -%}
                       {%- render 'article-item',
                         article: article, show_excerpt: section.settings.show_excerpt, show_image: section.settings.show_image, show_date: section.settings.show_date, show_author: section.settings.show_author, button_style: section.settings.button_style_post
                       -%}
                     {%- endfor -%}
-                  </ul>
+                    </ul>
+                  </section>
+                {%- endif -%}
+                {%- if search.performed == false -%}
+                  <section class="vct-search-empty">
+                    <h2>Begin met zoeken</h2>
+                    <p>Gebruik een productnaam, merk, EAN of automodel om sneller uit te komen bij de juiste verlichting, detailing of upgrade.</p>
+                    <div class="vct-search-empty__actions">
+                      <a href="{{ routes.collections_url }}" class="vct-search-empty__button">Bekijk collecties</a>
+                      <a href="{{ routes.root_url }}" class="vct-search-empty__button vct-search-empty__button--ghost">Terug naar home</a>
+                    </div>
+                  </section>
+                {%- elsif search_result_count == 0 -%}
+                  <section class="vct-search-empty">
+                    <h2>Geen resultaten voor "{{ search.terms | escape }}"</h2>
+                    <p>Probeer een kortere zoekterm, een merknaam of een artikelnummer. Je kunt ook via de collecties verder navigeren.</p>
+                    <div class="vct-search-empty__actions">
+                      <a href="{{ routes.collections_url }}" class="vct-search-empty__button">Bekijk collecties</a>
+                      <a href="{{ routes.search_url }}" class="vct-search-empty__button vct-search-empty__button--ghost">Nieuwe zoekopdracht</a>
+                    </div>
+                  </section>
                 {%- endif -%}
               </div>
               {% render 'pagination',
@@ -224,7 +287,7 @@
     {%- endfor -%}
   {%- if show_filters_and_menu -%}</div>{%- endif -%}
   {% if show_filters_and_menu %}
-    <aside>
+    <aside class="vct-collection-sidebar">
       {%- render 'filters-sorting',
         display: 'filters',
         origin: 'search',

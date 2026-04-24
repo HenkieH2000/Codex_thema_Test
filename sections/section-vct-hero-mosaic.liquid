@@ -4,6 +4,7 @@
   if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.text != blank
     assign show_header = true
   endif
+  assign free_shipping_amount = settings.free_shipping_amount | replace: ',', '.' | times: 1 | times: 100
 -%}
 
 <section class="vct-hero-mosaic section-width-{{ section.settings.width }}{% if section.settings.enable_overlap %} vct-hero-mosaic--overlap{% endif %}">
@@ -19,6 +20,11 @@
         {%- if section.settings.text != blank -%}
           <div class="rte">{{ section.settings.text }}</div>
         {%- endif -%}
+        <ul class="vct-hero-mosaic__chips" aria-label="Shopvoordelen">
+          <li>Voor 20:00 besteld</li>
+          <li>Gratis vanaf {{ free_shipping_amount | money | replace: ',00', ',-' }}</li>
+          <li>30 dagen bedenktijd</li>
+        </ul>
       </div>
     {%- endif -%}
 
