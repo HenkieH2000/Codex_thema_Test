@@ -1,25 +1,28 @@
 {%- liquid
   assign context = context | default: 'default'
   assign show_note = show_note | default: false
+  assign show_items = show_items | default: true
 -%}
 
-<div class="vct-checkout-assurance vct-checkout-assurance--{{ context }}">
-  <div class="vct-checkout-assurance__item">
-    <span>🚚</span>
-    <strong>Snelle verzending</strong>
+{%- if show_items -%}
+  <div class="vct-checkout-assurance vct-checkout-assurance--{{ context }}">
+    <div class="vct-checkout-assurance__item">
+      <span>🚚</span>
+      <strong>Snelle verzending</strong>
+    </div>
+    <div class="vct-checkout-assurance__item">
+      <span>↺</span>
+      <strong>30 dagen bedenktijd</strong>
+    </div>
+    <div class="vct-checkout-assurance__item">
+      <span>🔒</span>
+      <strong>Veilig betalen</strong>
+    </div>
   </div>
-  <div class="vct-checkout-assurance__item">
-    <span>↺</span>
-    <strong>30 dagen bedenktijd</strong>
-  </div>
-  <div class="vct-checkout-assurance__item">
-    <span>🔒</span>
-    <strong>Veilig betalen</strong>
-  </div>
-</div>
+{%- endif -%}
 
 {%- if show_note -%}
-  <p class="vct-checkout-note">
+  <p class="vct-checkout-note vct-checkout-note--{{ context }}">
     Door af te rekenen accepteer je de
     <a href="/policies/terms-of-service" target="_blank" rel="noopener noreferrer">algemene voorwaarden</a>
     en bevestig je dat je bestelling en gegevens gecontroleerd zijn.

@@ -1,4 +1,8 @@
-<div class="vct-payment-strip">
+{%- liquid
+  assign context = context | default: 'default'
+-%}
+
+<div class="vct-payment-strip vct-payment-strip--{{ context }}">
   <div class="vct-payment-strip__copy">
     <span class="vct-payment-strip__eyebrow">Veilig afrekenen</span>
     <strong>Betaal zoals jij wilt</strong>

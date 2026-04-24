@@ -441,14 +441,10 @@
         </button>
       {%- endif -%}
     </p>
-    {%- render 'vct-checkout-assurance', context: 'cart-note', show_note: true -%}
+    {%- render 'vct-checkout-assurance', context: 'cart-note', show_items: false, show_note: true -%}
   </form>
   {%- if settings.show_trustbadge -%}
     {%- render 'trustbadge' -%}
   {%- endif -%}
-  <ul class="l4pm text-center">
-    {%- for payment_method in shop.enabled_payment_types -%}
-      <li>{{ payment_method | payment_type_svg_tag }}</li>
-    {%- endfor -%}
-  </ul>
+  {%- render 'vct-payment-strip', context: 'drawer' -%}
 {%- endif -%}
