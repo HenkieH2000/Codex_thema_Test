@@ -755,8 +755,8 @@ html { scroll-behavior: smooth; }
   border-top: none !important;
   border-bottom: none !important;
   background: #fff;
-  border-radius: var(--b2r);
-  box-shadow: var(--vct-shadow-sm);
+  border-radius: 20px;
+  box-shadow: 0 14px 30px rgba(3,10,34,.06);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -771,9 +771,17 @@ html { scroll-behavior: smooth; }
 .l4cl:not(.slider) .product-card > figure,
 .l4cl:not(.slider) .product-card figure:first-child {
   flex-shrink: 0;
-  border-radius: var(--b2r) var(--b2r) 0 0;
+  border-radius: 20px 20px 0 0;
   overflow: hidden;
   margin: 0;
+  background: #f3f5f7;
+  box-shadow: inset 0 0 0 1px rgba(3,10,34,.05);
+}
+
+.l4cl:not(.slider) .product-card > figure picture,
+.l4cl:not(.slider) .product-card figure:first-child picture {
+  display: block;
+  background: #f3f5f7;
 }
 
 /* Image zoom on hover — GPU-safe */
@@ -781,6 +789,7 @@ html { scroll-behavior: smooth; }
   transition: transform 0.55s var(--vct-ease);
   display: block;
   width: 100%;
+  background: #f3f5f7;
 }
 
 .l4cl:not(.slider) .product-card:hover figure img {
@@ -831,11 +840,8 @@ html { scroll-behavior: smooth; }
 
 /* ── Hover: lift + deepen shadow + orange glow ───────────────── */
 .l4cl:not(.slider) .product-card:hover {
-  transform: translateY(-7px);
-  box-shadow:
-    var(--vct-shadow-md),
-    0 0 0 1px rgba(255,126,0,.10),
-    0 20px 40px -12px rgba(255,126,0,.18);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(3,10,34,.1);
 }
 
 .l4cl:not(.slider) .product-card:active {
@@ -1084,7 +1090,12 @@ a.button:active {
 /* Sale badge → orange */
 .s1lb.label--sale,
 .s1lb .overlay-sale {
-  background: var(--vct-orange) !important;
+  background: #111827 !important;
+  color: #fff !important;
+}
+
+.s1lb span:not(.overlay-sale) {
+  background: rgba(17,24,39,.86) !important;
   color: #fff !important;
 }
 
@@ -2690,8 +2701,8 @@ textarea, select {
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(3, 10, 34, 0.08);
-  background: linear-gradient(180deg, #ffffff 0%, #f9fafc 100%);
-  box-shadow: 0 16px 36px rgba(3, 10, 34, 0.08);
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(3, 10, 34, 0.06);
   transition: transform var(--vct-dur-base) var(--vct-ease), box-shadow var(--vct-dur-base) var(--vct-ease), border-color var(--vct-dur-base) var(--vct-ease);
 }
 
@@ -2702,7 +2713,7 @@ textarea, select {
 .vct-product-card:hover {
   transform: translateY(-4px);
   border-color: rgba(3, 10, 34, 0.12);
-  box-shadow: 0 22px 48px rgba(3, 10, 34, 0.12);
+  box-shadow: 0 20px 40px rgba(3, 10, 34, 0.1);
 }
 
 .vct-product-card--list,
@@ -2718,7 +2729,8 @@ textarea, select {
   margin: -12px -12px 0;
   padding: 12px;
   border-radius: 20px;
-  background: linear-gradient(180deg, #f5f7fa 0%, #eef2f6 100%);
+  background: #f3f5f7;
+  box-shadow: inset 0 0 0 1px rgba(3, 10, 34, 0.05);
 }
 
 .vct-product-card--list .vct-product-card__media {
