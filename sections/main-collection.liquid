@@ -108,23 +108,6 @@
               {%- if collection.description != blank -%}
                 <p class="vct-collection-hero__text">{{ collection.description | strip_html | truncatewords: 28 }}</p>
               {%- endif -%}
-              {%- if collections_menu != blank or quick_links != blank -%}
-                <ul class="vct-collection-hero__chips">
-                  {%- if collections_menu != blank -%}
-                    {%- for featured_collection in collections_menu limit: 6 -%}
-                      <li>
-                        <a href="{{ featured_collection.url }}"{% if featured_collection.handle == collection.handle %} class="is-active"{% endif %}>{{ featured_collection.title }}</a>
-                      </li>
-                    {%- endfor -%}
-                  {%- else -%}
-                    {%- for link in quick_links.links limit: 6 -%}
-                      <li>
-                        <a href="{{ link.url }}"{% if link.active or link.child_active %} class="is-active"{% endif %}>{{ link.title }}</a>
-                      </li>
-                    {%- endfor -%}
-                  {%- endif -%}
-                </ul>
-              {%- endif -%}
             </div>
           </header>
           {%- if sorting_block == nil and show_filters_and_menu -%}

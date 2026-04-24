@@ -46,7 +46,7 @@
       endif
     endfor
   -%}
-  {%- if has_quick_links != empty or object.image -%}
+  {%- if has_quick_links != empty or (object.image and show_collection_image) -%}
     <nav class="n6as">
       {%- if object.image and show_collection_image -%}
         <figure class="{% if settings.multiply_collection_images == 'multiply' %}img-multiply{% elsif settings.multiply_collection_images == 'multiply-bg' %}img-multiply-bg{% endif %}">

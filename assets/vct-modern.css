@@ -2185,92 +2185,88 @@ textarea, select {
 }
 
 .vct-collection-hero {
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .vct-collection-hero__surface {
-  padding: 28px;
-  border-radius: 30px;
-  background:
-    radial-gradient(circle at top right, rgba(255,209,0,.16), transparent 26%),
-    linear-gradient(135deg, #ffffff 0%, #f8faff 58%, #fff5ec 100%);
-  border: 1px solid rgba(3,10,34,.06);
-  box-shadow: var(--vct-shadow-md);
+  padding: 6px 0 18px;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(3,10,34,.08);
+  box-shadow: none;
 }
 
 .vct-collection-hero h1,
 .vct-collection-hero h2,
 .vct-collection-hero h3 {
-  margin-bottom: 10px;
-  font-size: clamp(32px, 4vw, 54px);
+  margin-bottom: 8px;
+  font-size: clamp(34px, 4vw, 52px);
   line-height: 1.02;
 }
 
 .vct-collection-hero__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 14px 0 0;
+  gap: 0;
+  margin: 0;
 }
 
 .vct-collection-hero__meta span {
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.8);
-  border: 1px solid rgba(3,10,34,.08);
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
   font-size: 13px;
   font-weight: 600;
-  color: rgba(3,10,34,.74);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgba(3,10,34,.52);
+}
+
+.vct-collection-hero__meta span + span {
+  margin-left: 16px;
+  padding-left: 16px;
+}
+
+.vct-collection-hero__meta span + span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(3,10,34,.24);
+  transform: translateY(-50%);
 }
 
 .vct-collection-hero__text {
-  max-width: 70ch;
+  max-width: 62ch;
   margin: 14px 0 0;
-  color: rgba(3,10,34,.68);
+  color: rgba(3,10,34,.62);
   font-size: 15px;
-}
-
-.vct-collection-hero__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 18px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.vct-collection-hero__chips a {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid rgba(3,10,34,.08);
-  color: var(--vct-navy);
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform var(--vct-dur-base) var(--vct-ease), box-shadow var(--vct-dur-base) var(--vct-ease), border-color var(--vct-dur-base) var(--vct-ease);
-}
-
-.vct-collection-hero__chips a:hover,
-.vct-collection-hero__chips a.is-active {
-  transform: translateY(-2px);
-  border-color: rgba(255,126,0,.28);
-  box-shadow: var(--vct-shadow-sm);
+  line-height: 1.65;
 }
 
 .vct-collection-sidebar .n6as,
 .vct-collection-sidebar .f8fl,
 .f8sr {
   background: #fff;
-  border: 1px solid rgba(3,10,34,.07);
-  border-radius: 24px;
-  box-shadow: var(--vct-shadow-sm);
+  border: 1px solid rgba(3,10,34,.08);
+  border-radius: 20px;
+  box-shadow: none;
 }
 
 .vct-collection-sidebar .n6as {
-  padding: 16px 18px;
+  padding: 0;
   margin-bottom: 16px;
+  background: transparent;
+  border: 0;
+}
+
+.vct-collection-sidebar .n6as:empty {
+  display: none;
 }
 
 .vct-collection-sidebar .n6as ul,
@@ -2283,13 +2279,21 @@ textarea, select {
 }
 
 .vct-collection-sidebar .f8fl {
-  padding: 18px;
+  padding: 20px;
+}
+
+.vct-collection-sidebar .f8fl fieldset > header {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(3,10,34,.08);
 }
 
 .vct-collection-sidebar .f8fl h4 {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
-  color: var(--vct-navy);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgba(3,10,34,.88);
 }
 
 .vct-collection-sidebar .f8fl .check li + li {
@@ -2297,12 +2301,15 @@ textarea, select {
 }
 
 .vct-collection-grid {
-  gap: 18px !important;
+  gap: 24px !important;
 }
 
 .f8sr {
-  padding: 12px 16px;
-  margin-bottom: 18px;
+  padding: 0 0 18px;
+  margin-bottom: 22px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
 .f8sr fieldset {
@@ -2310,11 +2317,16 @@ textarea, select {
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid rgba(3,10,34,.08);
+  border-radius: 20px;
 }
 
 .f8sr .hx {
+  font-size: 15px;
   font-weight: 700;
-  color: rgba(3,10,34,.62);
+  color: rgba(3,10,34,.7);
 }
 
 .f8sr hr {
@@ -2330,15 +2342,57 @@ textarea, select {
 .f8sr .l4vw li a,
 .f8sr p > a,
 .f8sr select {
-  border-radius: 999px;
+  border-radius: 14px;
+  min-height: 42px;
+  border: 1px solid rgba(3,10,34,.08);
+  background: #f6f7f9;
+  box-shadow: none;
+  color: var(--vct-navy);
+}
+
+.f8sr p {
+  margin: 0;
+}
+
+.f8sr fieldset > p:last-child {
+  margin-left: auto;
+}
+
+.f8sr p > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.f8sr .l4vw li a {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f8sr .l4vw li.active a {
+  background: #111827;
+  border-color: #111827;
+  color: #fff;
+}
+
+.f8sr p label {
+  margin-right: 10px;
+  color: rgba(3,10,34,.62);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .f8sr select {
-  min-height: 42px;
   padding-left: 14px;
   padding-right: 38px;
-  background-color: #f7f8fb;
-  border-color: rgba(3,10,34,.08);
+  background-color: #f6f7f9;
 }
 
 @media (max-width: 1000px) {
@@ -2362,7 +2416,7 @@ textarea, select {
   }
 
   .vct-collection-hero__surface {
-    padding: 22px;
+    padding: 4px 0 16px;
   }
 }
 
@@ -2397,10 +2451,30 @@ textarea, select {
     font-size: clamp(28px, 8vw, 40px);
   }
 
-  .vct-collection-sidebar .n6as,
+  .vct-collection-hero__meta span + span {
+    margin-left: 12px;
+    padding-left: 12px;
+  }
+
+  .vct-collection-hero__text {
+    font-size: 14px;
+  }
+
   .vct-collection-sidebar .f8fl,
+  .f8sr fieldset {
+    border-radius: 18px;
+  }
+
   .f8sr {
-    border-radius: 20px;
+    padding-bottom: 16px;
+  }
+
+  .f8sr fieldset {
+    padding: 14px;
+  }
+
+  .f8sr fieldset > p:last-child {
+    margin-left: 0;
   }
 
   .vct-viewer-badge,
