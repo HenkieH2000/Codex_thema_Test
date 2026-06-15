@@ -1,197 +1,14 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "vct_hero_mosaic_qN7x2L": {
-      "type": "section-vct-hero-mosaic",
-      "blocks": {
-        "card_A1": {
-          "type": "card",
-          "settings": {
-            "label": "Vandaag populair",
-            "heading": "De slimste deals en upgrades voor je volgende rit.",
-            "text": "Gebruik deze hoofdkaart voor campagnes, bestsellers of seizoensdeals met maximale visuele rust.",
-            "link_text": "Shop aanbiedingen",
-            "link_url": "shopify://collections/aanbiedingen",
-            "button_palette": "buy_button",
-            "button_style": "plain",
-            "card_tone": "soft-orange",
-            "card_size": "large",
-            "image": "shopify://shop_images/banner_korting.png"
-          }
-        },
-        "card_A2": {
-          "type": "card",
-          "settings": {
-            "label": "Snelle route",
-            "heading": "Verlichting die direct opvalt",
-            "text": "Ga zonder omwegen naar koplampen, LED upgrades en werklampen.",
-            "link_text": "Bekijk verlichting",
-            "link_url": "shopify://collections/verlichting",
-            "button_palette": "primary",
-            "button_style": "plain",
-            "card_tone": "soft-blue",
-            "card_size": "small",
-            "image": "shopify://shop_images/koplamp_banner.webp"
-          }
-        },
-        "card_A3": {
-          "type": "card",
-          "settings": {
-            "label": "Meer dan parts",
-            "heading": "Detailing, audio en CarPlay als slimme tweede klik",
-            "text": "Perfect om AOV te verhogen met producten die logisch aansluiten op de eerste behoefte.",
-            "link_text": "Ontdek detailing",
-            "link_url": "shopify://collections/detailing",
-            "button_palette": "secondary",
-            "button_style": "plain",
-            "card_tone": "white",
-            "card_size": "small",
-            "image": "shopify://shop_images/vctdetailing_banner_desktop.jpg"
-          }
-        }
-      },
-      "block_order": [
-        "card_A1",
-        "card_A2",
-        "card_A3"
-      ],
-      "settings": {
-        "width": "boxed",
-        "eyebrow": "Nieuwe shopflow",
-        "title": "<h1>Shop sneller naar verlichting, detailing en upgrades die direct vertrouwen geven.</h1>",
-        "text": "<p>De homepage voelt nu meer als een moderne storefront: veel rust, sterke categorie-focus en duidelijke routes naar bestsellers, service en premium merken.</p>",
-        "text_alignment": "start",
-        "enable_overlap": false,
-        "spacing_desktop": 32,
-        "spacing_mobile": 20
-      }
-    },
-    "vct_category_cards_uK2d9M": {
-      "type": "section-vct-category-cards",
-      "blocks": {
-        "cat_1": {
-          "type": "card",
-          "settings": {
-            "title": "Verlichting",
-            "caption": "LED & koplampen",
-            "link": "shopify://collections/verlichting",
-            "image": "shopify://shop_images/koplamp_banner.webp",
-            "tone": "white"
-          }
-        },
-        "cat_2": {
-          "type": "card",
-          "settings": {
-            "title": "Detailing",
-            "caption": "Glans & bescherming",
-            "link": "shopify://collections/detailing",
-            "image": "shopify://shop_images/vctdetailing_banner_desktop.jpg",
-            "tone": "soft"
-          }
-        },
-        "cat_3": {
-          "type": "card",
-          "settings": {
-            "title": "Audio",
-            "caption": "Nieuw in audio",
-            "link": "shopify://collections/audio",
-            "image": "shopify://shop_images/speaker_banner.webp",
-            "tone": "accent"
-          }
-        },
-        "cat_4": {
-          "type": "card",
-          "settings": {
-            "title": "CarPlay",
-            "caption": "OEM+ gemak",
-            "link": "shopify://collections/carplay-android-auto-inbouwservice",
-            "image": "shopify://shop_images/carplay_bmw_f30_3b57281c-0620-4cbd-8af5-5e0381f439f5.png",
-            "tone": "white"
-          }
-        },
-        "cat_5": {
-          "type": "card",
-          "settings": {
-            "title": "Merken",
-            "caption": "Shop op merk",
-            "link": "shopify://collections",
-            "image": "shopify://shop_images/halovision_logo_png22.png",
-            "tone": "soft"
-          }
-        }
-      },
-      "block_order": [
-        "cat_1",
-        "cat_2",
-        "cat_3",
-        "cat_4",
-        "cat_5"
-      ],
-      "settings": {
-        "width": "boxed",
-        "title": "<h2>Begin bij je upgrade-categorie</h2>",
-        "link_text": "Alle categorieën",
-        "link_url": "shopify://collections",
-        "spacing_desktop": 36,
-        "spacing_mobile": 20
-      }
-    },
-    "vct_conversion_cards_G8s2vP": {
-      "type": "section-vct-conversion-cards",
-      "blocks": {
-        "conv_1": {
-          "type": "card",
-          "settings": {
-            "eyebrow": "Snelle levering",
-            "title": "Gratis verzending vanaf €39 maakt grotere mandjes logischer.",
-            "text": "Een duidelijke drempel verlaagt frictie en verhoogt orderwaarde.",
-            "link_text": "Meer over levering",
-            "link_url": "shopify://pages/verzending-levering",
-            "button_palette": "primary",
-            "button_style": "plain",
-            "tone": "white",
-            "image": "shopify://shop_images/VCtparts_Banner_doos.png"
-          }
-        },
-        "conv_2": {
-          "type": "card",
-          "settings": {
-            "eyebrow": "Echte hulp",
-            "title": "Persoonlijk contact houdt technischere keuzes laagdrempelig.",
-            "text": "Laat direct zien dat klanten ook voor advies en installatie kunnen aankloppen.",
-            "link_text": "Contact opnemen",
-            "link_url": "shopify://pages/contact",
-            "button_palette": "buy_button",
-            "button_style": "plain",
-            "tone": "gradient",
-            "image": "shopify://shop_images/mel_klantenservice_headset.png"
-          }
-        },
-        "conv_3": {
-          "type": "card",
-          "settings": {
-            "eyebrow": "Zeker shoppen",
-            "title": "Retouren, service en betrouwbaarheid eerder tonen haalt twijfel uit de eerste klik.",
-            "text": "Sterke zekerheidsblokken geven rust nog voor iemand een productpagina opent.",
-            "link_text": "Lees meer",
-            "link_url": "shopify://pages/retourneren",
-            "button_palette": "secondary",
-            "button_style": "plain",
-            "tone": "navy",
-            "image": "shopify://shop_images/lindsey_bellen.jpg"
-          }
-        }
-      },
-      "block_order": [
-        "conv_1",
-        "conv_2",
-        "conv_3"
-      ],
-      "settings": {
-        "width": "boxed",
-        "spacing_desktop": 36,
-        "spacing_mobile": 20
-      }
-    },
     "section_grid_yyCXme": {
       "type": "section-grid",
       "blocks": {
@@ -355,12 +172,12 @@
         "limit": 8,
         "number_of_items": 5,
         "text_alignment": "start",
-        "title": "<h2>Populaire upgrades deze week</h2>",
+        "title": "<h2>Aanbevolen producten</h2>",
         "title_underline_style": "none",
-        "text": "<p>Direct onder de categorieën houden we de homepage meteen koopbaar, zonder extra ruis.</p>",
-        "show_link": true,
-        "link_text": "Bekijk alles",
-        "button_style": "secondary link",
+        "text": "",
+        "show_link": false,
+        "link_text": "Bekijk alle",
+        "button_style": "primary plain",
         "enable_quick_buy_desktop": false,
         "enable_quick_buy_mobile": false,
         "enable_quick_buy_drawer": false,
@@ -368,8 +185,8 @@
         "enable_color_picker": false,
         "enable_quick_buy_compact": true,
         "mobile_layout": "slider",
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "section_gallery_GrcaBe": {
@@ -526,14 +343,14 @@
       "settings": {
         "number_of_items": 6,
         "text_alignment": "start",
-        "title": "<h2>Shop vertrouwde merken</h2>",
+        "title": "<h2>Merken</h2>",
         "title_underline_style": "none",
-        "show_link": false,
+        "show_link": true,
         "link_text": "Button",
         "link_url": "",
         "button_style": "primary plain",
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "section_featured_products_PmQAky": {
@@ -551,7 +368,7 @@
           "carplay-en-android-auto-digitale-virtuele-cockpit-instrument-gauge-cluster-snelheidsmeter-voor-vw-passat-cc-b7-b8-golf-6-7-mk7-tiguan-scirocco-jetta-t6-sharan",
           "dudao-autolader-2x-usb-3x-sigarettenaansteker-splitter-zwart",
           "carplay-android-auto-multimedia-scherm-voor-volkswagen-skoda-seat-gps-navigatie-geschikt-voor-golf-5-6-passat-b6-polo-jetta-touran-octavia-en-meer-inbouwen-inbouwservice-installatie-1",
-          "h7-led-canbus-belastingsweerstand-canceler-decoder-set",
+          "halovision-h7-halogeen-naar-led-adapter-canbus-decoder-6-ohm-50w-belastingsweerstand-set",
           "ceramic-sealer-premium-keramische-coating-500ml-krachtig-tegen-vuil-voor-een-glanzend-resultaat-kopie",
           "elektrische-uitlaat-kleppensysteem-set-2-5-inch-63mm-met-2x-klem-mof-bypass-universeel-draadloos-met-afstandsbediening-dubbele-pijp-met-klep-1",
           "amio-awl13-werklamp-verstraler-spot-vierkant-77led-9-36v-6000k-wit-2-stuks-set",
@@ -560,7 +377,7 @@
         "layout": "slider",
         "number_of_items": 5,
         "text_alignment": "start",
-        "title": "<h2>Nieuwe favorieten en premium picks</h2>",
+        "title": "<h2>Uitgelichte producten</h2>",
         "title_underline_style": "none",
         "text": "",
         "show_link": false,
@@ -574,8 +391,8 @@
         "enable_color_picker": false,
         "enable_quick_buy_compact": false,
         "mobile_layout": "slider",
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "section_gallery_QGdBGK": {
@@ -604,7 +421,7 @@
             "overlay_opacity": 0,
             "color_palette": "scheme-2",
             "text_position": "end start",
-            "title": "<h2>Snelle levering</h2>",
+            "title": "<h2>Levertijd</h2>",
             "title_underline_style": "none",
             "text": "",
             "show_link": true,
@@ -620,7 +437,7 @@
             "overlay_opacity": 0,
             "color_palette": "scheme-4",
             "text_position": "end start",
-            "title": "<h2>Over VCTparts</h2>",
+            "title": "<h2>Over ons</h2>",
             "title_underline_style": "none",
             "text": "",
             "show_link": true,
@@ -647,8 +464,8 @@
         "content_on_hover_color_palette": "",
         "layout_mobile": "rows",
         "mobile_height": "16/9",
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "166029123538307d80": {
@@ -657,7 +474,7 @@
         "blog": "news",
         "number_of_items": 3,
         "text_alignment": "start",
-        "title": "<h2>Hulp, inspiratie en updates</h2>",
+        "title": "<h2>Blogs</h2>",
         "title_underline_style": "none",
         "show_link": true,
         "link_text": "Bekijk alle blogs",
@@ -668,8 +485,8 @@
         "show_author": false,
         "show_excerpt": true,
         "button_style_post": "primary link",
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "section_recently_viewed_products_GiXQXk": {
@@ -680,7 +497,7 @@
       "settings": {
         "number_of_items": 5,
         "text_alignment": "start",
-        "title": "<h2>Verder waar je gebleven was</h2>",
+        "title": "<h2>Laatst bekeken</h2>",
         "title_underline_style": "none",
         "enable_quick_buy_desktop": false,
         "enable_quick_buy_drawer": false,
@@ -688,8 +505,8 @@
         "enable_quick_buy_qty_selector": false,
         "enable_color_picker": false,
         "enable_quick_buy_compact": true,
-        "spacing_desktop": 42,
-        "spacing_mobile": 24
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     },
     "section_gallery_CMUqji": {
@@ -789,21 +606,22 @@
         "autoplay": true,
         "autoplay_seconds": 3,
         "show_arrows": false,
-        "spacing_desktop": 36,
-        "spacing_mobile": 16
+        "spacing_desktop": 50,
+        "spacing_mobile": 30
       }
     }
   },
   "order": [
-    "vct_hero_mosaic_qN7x2L",
-    "1660291186859914cb",
-    "vct_category_cards_uK2d9M",
+    "section_grid_yyCXme",
+    "1660291177d9f45101",
     "16602912025c583cc8",
-    "vct_conversion_cards_G8s2vP",
+    "section_gallery_GrcaBe",
     "section_logo_list_8NCV8E",
     "section_featured_products_PmQAky",
     "section_gallery_QGdBGK",
     "166029123538307d80",
-    "section_recently_viewed_products_GiXQXk"
+    "section_recently_viewed_products_GiXQXk",
+    "section_gallery_CMUqji",
+    "1660291186859914cb"
   ]
 }
